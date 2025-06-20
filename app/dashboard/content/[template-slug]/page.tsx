@@ -50,7 +50,8 @@ export default function Page() {
       const finalPrompt = JSON.stringify(formData) + ', ' + selectedPrompt;
 
       const result = await chatSession.sendMessage(finalPrompt);
-      const responseText = result?.response.text();
+      const responseText = await result?.response.text(); // ✅ FIXED LINE
+      console.log("Generated AI Text:", responseText); // ✅ Added for debugging
       setAiOutput(responseText);
       await SaveInDb(JSON.stringify(formData), selectedtemplate?.slug, responseText);
     } catch (error) {
@@ -66,7 +67,6 @@ export default function Page() {
       return;
     }
 
-    // Check if user data is available and email exists
     if (!isLoaded || !user || !user.primaryEmailAddress?.emailAddress) {
       console.error('User email is undefined or user data is not loaded');
       return;
